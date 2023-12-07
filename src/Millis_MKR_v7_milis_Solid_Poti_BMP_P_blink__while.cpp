@@ -157,6 +157,7 @@ void testSystem() {
 }
 
 void setup() {
+  while (!Serial) delay(100);  // wait for native usb
   Serial.begin(115200);
   Serial.println("initialized");
   delay(1000);
@@ -170,9 +171,9 @@ void setup() {
 
   testSystem();
 
-  while (!Serial) delay(100);  // wait for native usb
   Serial.println(F("BMP280 test"));
-  unsigned status;
+  // muss das Programm warten, bis Serial bereit ist ??? -- while (!serial) delay(100);
+  bool status = false;
   //status = bmp.begin(BMP280_ADDRESS_ALT, BMP280_CHIPID);
   status = bmp.begin();
   if (!status) {
@@ -184,8 +185,9 @@ void setup() {
     Serial.print("   ID of 0x56-0x58 represents a BMP 280,\n");
     Serial.print("        ID of 0x60 represents a BME 280.\n");
     Serial.print("        ID of 0x61 represents a BME 680.\n");
-    while (1) delay(10);
+    while (true) delay(10);
   }
+  
   Serial.println("initialized");
   // Default settings from datasheet. //
 
@@ -204,7 +206,7 @@ void setup() {
   tft.setTextColor(ST77XX_WHITE);
   tft.setCursor(120, 20);
   tft.print("sleeping....");
-
+/*
 int buttonCount;
   while (buttonCount <= 2){
     if (digitalRead (BUTTON_PIN_1) == LOW) {
@@ -212,6 +214,7 @@ int buttonCount;
       delay (100);
     }
   }
+  */
   
   mediabuttons_on();
 
@@ -304,6 +307,7 @@ void loop() {
   byte potiInterval = map(potiPosition, -60, 238, 1, 7);
   //byte lastpotiInterval = 0;
   //if (potiInterval != lastpotiInterval) {
+  /*  
   switch (potiInterval) {
     case 1:
       tft.fillRoundRect(1, 230, 240, 60, 1, ST77XX_WHITE);
@@ -334,7 +338,9 @@ void loop() {
     default:
       break;
   }
+  */
   //}
+  /*
   int potiSumme;
   //int potiZyklus = 0;
   if (previousPotiPosition != potiPosition) {
@@ -346,6 +352,7 @@ void loop() {
       tft.fillCircle(20, 200, 20, ST77XX_RED);
     }
   }
+  */
 
   /*
   if (DEBUG) {
@@ -380,7 +387,7 @@ void loop() {
   currentPress = currentPress * 10000;
   int roundPress = round(currentPress);
   //roundPress/10000
-  currentPress = roundPress / 1000000;
+  currentPress = roundPress / 10000 / 100;
 
 
   //if (currentTime - previousTime_2 >= zeit_2 && currentPress != pressValue) {
